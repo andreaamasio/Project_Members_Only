@@ -3,7 +3,7 @@ require("dotenv").config()
 const { Client } = require("pg")
 
 const SQL = `
-CREATE TABLE IF NOT EXISTS members (
+CREATE TABLE IF NOT EXISTS members_only (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name VARCHAR ( 255 ) NOT NULL,
   surname VARCHAR ( 255 ) NOT NULL,
@@ -11,7 +11,14 @@ CREATE TABLE IF NOT EXISTS members (
   password VARCHAR ( 255 ) NOT NULL,
   is_member BOOLEAN NOT NULL DEFAULT FALSE,
   admin BOOLEAN NOT NULL DEFAULT FALSE
-);`
+);
+CREATE TABLE IF NOT EXISTS messages_members (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  time_posted TIMESTAMP DEFAULT NOW(),
+  text TEXT NOT NULL,
+  members_id INTEGER NOT NULL REFERENCES members_only(id) ON DELETE CASCADE
+  );`
 
 async function main() {
   console.log("Seeding database...")
