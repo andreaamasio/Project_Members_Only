@@ -5,12 +5,27 @@ async function getAllMembers() {
   const { rows } = await pool.query("SELECT * FROM members_only")
   return rows
 }
-// async function postNewMessage(text, user) {
-//   await pool.query(`INSERT INTO messages (text,"user") VALUES ($1, $2)`, [
-//     text,
-//     user,
-//   ])
-//   console.log(`insert of: ${text}, ${user} was done`)
-//   return
-// }
-module.exports = { getAllMembers, postNewMessage }
+async function getAllMessages() {
+  const { rows } = await pool.query("SELECT * FROM messages_members")
+  return rows
+}
+async function postNewUser(
+  first_name,
+  last_name,
+  username,
+  password,
+  is_admin
+) {
+  const query = `
+    INSERT INTO members_only (name, surname, username, password, admin)
+    VALUES ($1, $2, $3, $4, $5);`
+  const values = [first_name, last_name, username, password, is_admin]
+
+  try {
+    const result = await pool.query(query, values)
+    return result.rows[0]
+  } catch (err) {
+    console.error("Error inserting user:", err)
+  }
+}
+module.exports = { getAllMembers, postNewUser, getAllMessages }
