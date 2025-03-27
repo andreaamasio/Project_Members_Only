@@ -1,19 +1,18 @@
 const { body, validationResult } = require("express-validator")
 const bcrypt = require("bcryptjs")
 const db = require("../db/queries")
+const passport = require("passport")
+const LocalStrategy = require("passport-local").Strategy
 const emptyErr = "cannot be empty."
 const validateUser = [
   body("first_name").notEmpty().withMessage(`Username: ${emptyErr}`),
   body("last_name").notEmpty().withMessage(`Username: ${emptyErr}`),
   body("username").notEmpty().withMessage(`Username: ${emptyErr}`),
 ]
-// async function getMessages(req, res) {
-//   const messages = await db.getAllMessages()
-//   console.log(`Messages:`, messages)
-
-//   res.render("index", { messages: messages })
-// }
-async function postNewUser(req, res) {
+async function getLogIn(req, res) {
+  res.render("log-in")
+}
+async function postLogIn(req, res) {
   console.log(req.body)
   let first_name = req.body.first_name
   let last_name = req.body.last_name
@@ -32,4 +31,4 @@ async function postNewUser(req, res) {
   //res.send("Usernames: " + messages.map((message) => message.user).join(", "))
   res.redirect("/")
 }
-module.exports = { postNewUser }
+module.exports = { getLogIn, postLogIn }
