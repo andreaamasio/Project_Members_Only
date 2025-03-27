@@ -28,4 +28,11 @@ async function postNewUser(
     console.error("Error inserting user:", err)
   }
 }
-module.exports = { getAllMembers, postNewUser, getAllMessages }
+async function findUserByEmail(email) {
+  const result = await pool.query(
+    "SELECT * FROM members_only WHERE username = $1",
+    [email]
+  )
+  return result.rows[0] // Returns user if found, otherwise undefined
+}
+module.exports = { getAllMembers, postNewUser, getAllMessages, findUserByEmail }
