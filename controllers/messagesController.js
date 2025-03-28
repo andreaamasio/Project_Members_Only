@@ -10,7 +10,16 @@ async function getMessages(req, res) {
   const messages = await db.getAllMessages()
   console.log(`Messages:`, messages)
 
-  res.render("index", { messages: messages })
+  res.render(
+    "index"
+    //{ messages: messages }
+  )
+}
+async function getNewMessage(req, res) {
+  res.render(
+    "new-message-form"
+    //{ messages: messages }
+  )
 }
 async function postNewMessage(req, res) {
   let text = req.body.text_message
@@ -23,4 +32,4 @@ async function postNewMessage(req, res) {
   //res.send("Usernames: " + messages.map((message) => message.user).join(", "))
   res.redirect("/")
 }
-module.exports = { getMessages, postNewMessage }
+module.exports = { getMessages, getNewMessage, postNewMessage }

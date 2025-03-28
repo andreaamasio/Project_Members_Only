@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Message</title>
+  </head>
+  <body>
+    <h1>Fill below field to send a new message:</h1>
+    <%- include("./partials/errors.ejs") %>
+    <form action="/new-message" method="POST">
+      <label for="message_title">Title:</label>
+      <input type="text" name="message_title" id="message_title" required />
+
+      <label for="message_text">Your message:</label>
+      <textarea
+        id="message_text"
+        name="message_text"
+        rows="4"
+        cols="50"
+        placeholder="write your message here"
+        required
+      ></textarea>
+
+      <button type="submit">Send New Message</button>
+    </form>
+  </body>
+</html>
