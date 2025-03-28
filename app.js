@@ -3,17 +3,64 @@ const express = require("express")
 const formRouter = require("./routes/formRouter")
 const indexRouter = require("./routes/indexRouter")
 const messageRouter = require("./routes/messageRouter")
-const authenticationRouter = require("./routes/authenticationRouter")
+const authRouter = require("./routes/authRouter")
+const { body, validationResult } = require("express-validator")
+const db = require("./db/queries")
 const app = express()
+const session = require("express-session")
+const passport = require("passport")
+const LocalStrategy = require("passport-local").Strategy
 app.use(express.urlencoded({ extended: true }))
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "ejs")
 const assetsPath = path.join(__dirname, "public")
 
 app.use(express.static(assetsPath))
+// Session middleware
+app.use(
+  session({
+    secret: "your_secret_key",
+    resave: false,
+    saveUninitialized: true,
+  })
+)
+
+// Initialize Passport and use session
+app.use(passport.initialize())
+app.use(passport.session())
+
+// Set up Passport Local Strategy
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const user = await db.findUserByUsername(username)
+      if (!user) return done(null, false, { message: "Incorrect username" })
+
+      const isMatch = await bcrypt.compare(password, user.password)
+      if (!isMatch) return done(null, false, { message: "Incorrect password" })
+
+      return done(null, user)
+    } catch (error) {
+      return done(error)
+    }
+  })
+)
+
+// Serialize user
+passport.serializeUser((user, done) => done(null, user.id))
+
+// Deserialize user
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await db.findUserById(id)
+    done(null, user)
+  } catch (error) {
+    done(error)
+  }
+})
 app.use("/new-message", messageRouter)
 app.use("/sign-up", formRouter)
-app.use("/log-in", authenticationRouter)
+app.use("/log-in", authRouter)
 app.use("/", indexRouter)
 
 const PORT = 3000
