@@ -10,10 +10,7 @@ async function getMessages(req, res) {
   const messages = await db.getAllMessages()
   console.log(`Messages:`, messages)
 
-  res.render(
-    "index"
-    //{ messages: messages }
-  )
+  res.render("index", { messages: messages })
 }
 async function getNewMessage(req, res) {
   res.render(

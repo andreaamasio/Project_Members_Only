@@ -9,9 +9,7 @@ const validateUser = [
   body("last_name").notEmpty().withMessage(`Username: ${emptyErr}`),
   body("username").notEmpty().withMessage(`Username: ${emptyErr}`),
 ]
-async function getLogIn(req, res) {
-  res.render("log-in")
-}
+
 async function postLogIn(req, res) {
   console.log(req.body)
   let first_name = req.body.first_name
@@ -31,4 +29,4 @@ async function postLogIn(req, res) {
   //res.send("Usernames: " + messages.map((message) => message.user).join(", "))
   res.redirect("/")
 }
-module.exports = { getLogIn, postLogIn }
+module.exports = { postLogIn }

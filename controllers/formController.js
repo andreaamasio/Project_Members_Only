@@ -70,7 +70,6 @@ const postNewUser = [
       is_admin
     )
 
-    //res.send("Usernames: " + messages.map((message) => message.user).join(", "))
     res.redirect("/")
   },
 ]

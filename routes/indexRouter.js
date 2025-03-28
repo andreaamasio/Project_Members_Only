@@ -6,6 +6,5 @@ const indexRouter = Router()
 indexRouter.use(express.urlencoded({ extended: true }))
 
 indexRouter.get("/", messagesController.getMessages)
-indexRouter.post("/new", messagesController.postNewMessage)
 
 module.exports = indexRouter
