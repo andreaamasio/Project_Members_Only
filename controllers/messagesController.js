@@ -7,10 +7,22 @@ const validateUser = [
   body("username").notEmpty().withMessage(`Username: ${emptyErr}`),
 ]
 async function getMessages(req, res) {
-  const messages = await db.getAllMessages()
-  console.log(`Messages:`, messages)
+  const messages_members = await db.getAllMessages()
+  console.log("req.session.flash:", req.session.flash) // Debugging
+  console.log("req.user:", req.user) // Debugging
 
-  res.render("index", { messages: messages })
+  // Get the flash messages from the session
+  const flashMessages = req.session.flash || {}
+
+  // Clear the flash messages from the session
+  req.session.flash = {}
+
+  // Render the page with messages
+  res.render("index", {
+    messages: flashMessages,
+    messages_members: messages_members,
+    user: req.user,
+  })
 }
 async function getNewMessage(req, res) {
   res.render(

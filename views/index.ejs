@@ -6,13 +6,17 @@
     <title>Home</title>
   </head>
   <body>
-    <% if (user) {%>
-    <h1>Welcome back, you are logged as <%= user.username %></h1>
-    <a href="/log-out">Log out</a>
+    <% if (messages.error) { %>
+    <p style="color: red"><%= messages.error %></p>
+    <% } %> <% if (user) {%>
+    <h1>
+      Welcome back, you are logged as <%= user.name %> <%= user.surname %>
+    </h1>
+    <a href="/login/logout">Log out</a>
     <a href="/new-message">Post New Message</a>
     <%- include("./partials/message-board.ejs") %> <% } else { %>
     <h1>Please Log In</h1>
-    <form action="/log-in" method="POST">
+    <form action="/login" method="POST">
       <label for="username">Username:</label>
       <input type="text" name="username" id="username" />
       <label for="password">Password:</label>

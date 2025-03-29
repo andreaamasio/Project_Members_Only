@@ -8,7 +8,7 @@ const LocalStrategy = require("passport-local").Strategy
 // Login handler
 const loginUser = passport.authenticate("local", {
   successRedirect: "/",
-  failureRedirect: "/login",
+  failureRedirect: "/",
   failureFlash: true,
 })
 
@@ -19,28 +19,5 @@ const logoutUser = (req, res) => {
     res.redirect("/")
   })
 }
-const emptyErr = "cannot be empty."
-const validateUser = [
-  body("first_name").notEmpty().withMessage(`Username: ${emptyErr}`),
-  body("last_name").notEmpty().withMessage(`Username: ${emptyErr}`),
-  body("username").notEmpty().withMessage(`Username: ${emptyErr}`),
-]
 
-async function postLogIn(req, res) {
-  console.log(req.body)
-  let first_name = req.body.first_name
-  let last_name = req.body.last_name
-  let username = req.body.username
-  const hashedPassword = await bcrypt.hash(req.body.password, 10)
-  let is_admin = req.body.is_admin === "on" ? true : false
-
-  await db.postNewUser(
-    first_name,
-    last_name,
-    username,
-    hashedPassword,
-    is_admin
-  )
-  res.redirect("/")
-}
-module.exports = { postLogIn, loginUser, logoutUser }
+module.exports = { loginUser, logoutUser }

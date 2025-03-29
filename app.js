@@ -4,22 +4,17 @@ const formRouter = require("./routes/formRouter")
 const indexRouter = require("./routes/indexRouter")
 const messageRouter = require("./routes/messageRouter")
 const authRouter = require("./routes/authRouter")
+const bcrypt = require("bcryptjs")
 const { body, validationResult } = require("express-validator")
 const db = require("./db/queries")
 const app = express()
 const session = require("express-session")
+const flash = require("connect-flash")
 const passport = require("passport")
 const LocalStrategy = require("passport-local").Strategy
 app.use(express.urlencoded({ extended: true }))
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "ejs")
-const assetsPath = path.join(__dirname, "public")
-app.use((req, res, next) => {
-  res.locals.user = req.user // Make user available in all templates
-  next()
-})
-app.use(express.static(assetsPath))
-// Session middleware
 app.use(
   session({
     secret: "your_secret_key",
@@ -27,7 +22,14 @@ app.use(
     saveUninitialized: true,
   })
 )
-
+const assetsPath = path.join(__dirname, "public")
+app.use((req, res, next) => {
+  res.locals.user = req.user // Make user available in all templates
+  next()
+})
+app.use(express.static(assetsPath))
+// Session middleware
+app.use(flash())
 // Initialize Passport and use session
 app.use(passport.initialize())
 app.use(passport.session())
