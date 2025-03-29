@@ -8,8 +8,8 @@ const validateUser = [
 ]
 async function getMessages(req, res) {
   const messages_members = await db.getAllMessages()
-  console.log("req.session.flash:", req.session.flash) // Debugging
-  console.log("req.user:", req.user) // Debugging
+  // console.log("req.session.flash:", req.session.flash) // Debugging
+  // console.log("req.user:", req.user) // Debugging
 
   // Get the flash messages from the session
   const flashMessages = req.session.flash || {}
@@ -31,12 +31,13 @@ async function getNewMessage(req, res) {
   )
 }
 async function postNewMessage(req, res) {
-  let text = req.body.text_message
-  let title = req.body.title
+  let title = req.body.message_title
+  let text = req.body.message_text
+  let members_id = req.user.id
   //let user = req.body.user
   console.log(text)
   console.log(title)
-  await db.postNewMessage(text, user)
+  await db.postNewMessage(title, text, members_id)
 
   //res.send("Usernames: " + messages.map((message) => message.user).join(", "))
   res.redirect("/")

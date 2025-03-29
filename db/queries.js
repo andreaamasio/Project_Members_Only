@@ -6,8 +6,21 @@ async function getAllMembers() {
   return rows
 }
 async function getAllMessages() {
-  const { rows } = await pool.query("SELECT * FROM messages_members")
+  const { rows } = await pool.query(
+    "SELECT * FROM messages_members m JOIN members_only p ON m.members_id = p.id"
+  )
   return rows
+}
+async function postNewMessage(title, text, members_id) {
+  const query =
+    "INSERT INTO messages_members (title, text, members_id) VALUES ($1, $2, $3);"
+  const values = [title, text, members_id]
+  try {
+    const result = await pool.query(query, values)
+    return result.rows[0]
+  } catch (err) {
+    console.error("Error inserting message:", err)
+  }
 }
 async function postNewUser(
   first_name,
@@ -46,6 +59,7 @@ module.exports = {
   getAllMembers,
   postNewUser,
   getAllMessages,
+  postNewMessage,
   findUserByEmail,
   findUserById,
 }
