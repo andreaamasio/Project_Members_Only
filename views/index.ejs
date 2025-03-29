@@ -6,7 +6,7 @@
     <title>Home</title>
   </head>
   <body>
-    <% if (locals.user) {%>
+    <% if (user) {%>
     <h1>Welcome back, you are logged as <%= user.username %></h1>
     <a href="/log-out">Log out</a>
     <a href="/new-message">Post New Message</a>

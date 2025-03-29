@@ -1,8 +1,24 @@
 const { body, validationResult } = require("express-validator")
 const bcrypt = require("bcryptjs")
 const db = require("../db/queries")
+const session = require("express-session")
 const passport = require("passport")
 const LocalStrategy = require("passport-local").Strategy
+
+// Login handler
+const loginUser = passport.authenticate("local", {
+  successRedirect: "/",
+  failureRedirect: "/login",
+  failureFlash: true,
+})
+
+// Logout handler
+const logoutUser = (req, res) => {
+  req.logout((err) => {
+    if (err) return next(err)
+    res.redirect("/")
+  })
+}
 const emptyErr = "cannot be empty."
 const validateUser = [
   body("first_name").notEmpty().withMessage(`Username: ${emptyErr}`),
@@ -25,8 +41,6 @@ async function postLogIn(req, res) {
     hashedPassword,
     is_admin
   )
-
-  //res.send("Usernames: " + messages.map((message) => message.user).join(", "))
   res.redirect("/")
 }
-module.exports = { postLogIn }
+module.exports = { postLogIn, loginUser, logoutUser }

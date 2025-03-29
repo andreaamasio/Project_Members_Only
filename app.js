@@ -14,7 +14,10 @@ app.use(express.urlencoded({ extended: true }))
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "ejs")
 const assetsPath = path.join(__dirname, "public")
-
+app.use((req, res, next) => {
+  res.locals.user = req.user // Make user available in all templates
+  next()
+})
 app.use(express.static(assetsPath))
 // Session middleware
 app.use(
@@ -33,7 +36,7 @@ app.use(passport.session())
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      const user = await db.findUserByUsername(username)
+      const user = await db.findUserByEmail(username)
       if (!user) return done(null, false, { message: "Incorrect username" })
 
       const isMatch = await bcrypt.compare(password, user.password)
@@ -60,7 +63,7 @@ passport.deserializeUser(async (id, done) => {
 })
 app.use("/new-message", messageRouter)
 app.use("/sign-up", formRouter)
-app.use("/log-in", authRouter)
+app.use("/login", authRouter)
 app.use("/", indexRouter)
 
 const PORT = 3000

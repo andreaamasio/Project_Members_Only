@@ -35,4 +35,16 @@ async function findUserByEmail(email) {
   )
   return result.rows[0] // Returns user if found, otherwise undefined
 }
-module.exports = { getAllMembers, postNewUser, getAllMessages, findUserByEmail }
+async function findUserById(id) {
+  const result = await pool.query("SELECT * FROM members_only WHERE id = $1", [
+    id,
+  ])
+  return result.rows[0] // Returns user if found, otherwise undefined
+}
+module.exports = {
+  getAllMembers,
+  postNewUser,
+  getAllMessages,
+  findUserByEmail,
+  findUserById,
+}
