@@ -55,6 +55,18 @@ async function findUserById(id) {
 
   return result.rows[0] // Returns user if found, otherwise undefined
 }
+async function postNewMember(members_id) {
+  const query = "UPDATE members_only SET is_member = TRUE WHERE id = $1;"
+  const values = [members_id]
+
+  try {
+    const result = await pool.query(query, values)
+    return result.rows[0]
+  } catch (err) {
+    console.error("Error converting user to member:", err)
+  }
+}
+
 module.exports = {
   getAllMembers,
   postNewUser,
@@ -62,4 +74,5 @@ module.exports = {
   postNewMessage,
   findUserByEmail,
   findUserById,
+  postNewMember,
 }

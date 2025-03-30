@@ -6,16 +6,22 @@
     <title>Home</title>
   </head>
   <body>
-    <% if (messages.error && messages.error.length > 0) { %>
-    <p style="color: red"><%= messages.error[0] %></p>
-    <% } %> <% if (user) {%>
-    <h1>
-      Welcome back, you are logged as <%= user.name %> <%= user.surname %>
-    </h1>
-    <a href="/login/logout">Log out</a>
-    <a href="/new-message">Post New Message</a>
-    <a href="/login/join-the-club">Not a member? Join the Club.</a>
-    <%- include("./partials/message-board.ejs") %> <% } else { %>
+    <% if (user) { %>
+    <h1>You are logged in as <%= user.name %> <%= user.surname %></h1>
+
+    <% if (locals.message) { %>
+    <p style="color: red"><%= message %></p>
+    <% } %>
+
+    <form action="/login/join-the-club" method="POST">
+      <label for="member_passcode">
+        Enter the secret passcode to join the club:
+      </label>
+      <input type="text" name="member_passcode" id="member_passcode" />
+      <button type="submit">Join Now</button>
+    </form>
+
+    <% } else { %>
     <h1>Please Log In</h1>
     <form action="/login" method="POST">
       <label for="username">Username:</label>
@@ -25,6 +31,6 @@
       <button type="submit">Log in</button>
     </form>
     <p>Not a User? <a href="/sign-up">Sign Up</a></p>
-    <%- include("./partials/message-board.ejs") %> <%}%>
+    <% } %>
   </body>
 </html>

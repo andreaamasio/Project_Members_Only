@@ -1,14 +1,16 @@
 <h1>Message Board</h1>
 
 <% if (messages_members && messages_members.length > 0) { %> <%
-messages_members.forEach((message, index) => { %>
+messages_members.forEach((message) => { %>
 <div class="message_board">
+  <% if (user && user.is_member) { %>
   <div class="first_name"><%= message.name %></div>
   <div class="last_name"><%= message.surname %></div>
   <div class="username"><%= message.username %></div>
+  <% } %>
   <div class="time_posted"><%= message.time_posted %></div>
   <div class="messageText"><%= message.text %></div>
 </div>
-<% }) %> <% } else { %>
+<% }); %> <% } else { %>
 <p>No messages available.</p>
 <% } %>

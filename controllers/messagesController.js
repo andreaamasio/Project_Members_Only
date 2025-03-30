@@ -8,8 +8,6 @@ const validateUser = [
 ]
 async function getMessages(req, res) {
   const messages_members = await db.getAllMessages()
-  // console.log("req.session.flash:", req.session.flash) // Debugging
-  // console.log("req.user:", req.user) // Debugging
 
   // Get the flash messages from the session
   const flashMessages = req.session.flash || {}
